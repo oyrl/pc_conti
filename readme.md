@@ -7,3 +7,7 @@ modify the package.xml to add
 add the CMakeLists.txt
 add_executable(pub_pcl src/pub_pcl.cpp)
 target_link_libraries(pub_pcl ${catkin_LIBRARIES})
+
+add PointCloud2 in rviz
+select the "/pcl_output" Topic
+modify the Fixed Frame to odom
