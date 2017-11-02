@@ -5,5 +5,5 @@ modify the package.xml to add
   <run_depend>libpcl-all</run_depend>
 
 add the CMakeLists.txt
-add_executable(example src/example.cpp)
-target_link_libraries(example ${catkin_LIBRARIES})
+add_executable(pub_pcl src/pub_pcl.cpp)
+target_link_libraries(pub_pcl ${catkin_LIBRARIES})
