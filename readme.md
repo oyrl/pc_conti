@@ -11,3 +11,7 @@ target_link_libraries(pub_pcl ${catkin_LIBRARIES})
 add PointCloud2 in rviz
 select the "/pcl_output" Topic
 modify the Fixed Frame to odom
+
+refer:
+http://wiki.ros.org/pcl/Tutorials
+http://blog.csdn.net/ktigerhero3/article/details/70185651
