@@ -5,6 +5,8 @@ from sensor_msgs.msg import PointCloud
 import std_msgs.msg
 import math
 
+# switch to change the mode. True is by cycle, False is by time.
+split_by_cycle = True
 
 if __name__ == '__main__':
 	rospy.init_node('pub_pcl')
@@ -30,16 +32,20 @@ if __name__ == '__main__':
 			tmp = str.split(line)
 			dist = float(tmp[len(tmp) -1])
 			z = 1
-			# timestamp overflow ?
-			#data.append([int(tmp[0]), int(tmp[2]), dist*math.cos(angle), dist*math.sin(angle), z])
-			data.append([int(tmp[0][0:9]), int(tmp[2]), dist*math.cos(angle), dist*math.sin(angle), z])
+			if split_by_cycle:
+				data.append([tmp[0], int(tmp[2]), dist*math.cos(angle), dist*math.sin(angle), z])
+			else:
+				# timestamp overflow ?
+				data.append([int(tmp[0][0:9]), int(tmp[2]), dist*math.cos(angle), dist*math.sin(angle), z])
 	fp.close()
 
 	idx = 0
-	pre = data[0][1]
-#	pre = data[idx][0]
-	#d = 30	# s
-#	d = 70	# s
+	if split_by_cycle:
+		pre = data[idx][1]
+	else:
+		pre = data[idx][0]
+		#d = 30	# s
+		d = 70	# s
 	n = len(data) - 1
 	while not rospy.is_shutdown():
 		if idx == n:
@@ -47,13 +53,19 @@ if __name__ == '__main__':
 		idx_pre = idx
 		if idx != 0:
 			idx = idx + 1
-			pre = data[idx][1]
-#			pre = data[idx][0]
-		while idx < n and pre < data[idx+1][1]:
-#		while idx < n and data[idx+1][0] < (pre + d) :
-			idx = idx + 1
-			pre = data[idx][1]
-#		print "idx", idx, "idx_pre", idx_pre, "during:", idx - idx_pre
+			if split_by_cycle:
+				pre = data[idx][1]
+			else:
+				pre = data[idx][0]
+
+		if split_by_cycle:
+			while idx < n and pre < data[idx+1][1]:
+				idx = idx + 1
+				pre = data[idx][1]
+		else:
+			while idx < n and data[idx+1][0] < (pre + d) :
+				idx = idx + 1
+		#print "idx", idx, "idx_pre", idx_pre, "during:", idx - idx_pre
 		#print data[idx]
 		#print pre
 
@@ -70,7 +82,7 @@ if __name__ == '__main__':
 		for i in xrange(0, number_of_frame):
 			output.points[i] = Point(data[i+idx_pre][2], data[i+idx_pre][3], data[i+idx_pre][4])
 			#print output.points[i]
-			#print data[i+idx_pre][2], data[i+idx_pre][3], data[i+idx_pre][4]
+			print data[i+idx_pre][2], data[i+idx_pre][3], data[i+idx_pre][4]
 
 		# now publish the pointcloud
 		cloud_pub.publish(output)
