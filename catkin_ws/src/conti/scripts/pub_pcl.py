@@ -65,7 +65,7 @@ if __name__ == '__main__':
 		else:
 			while idx < n and data[idx+1][0] < (pre + d) :
 				idx = idx + 1
-		#print "idx", idx, "idx_pre", idx_pre, "during:", idx - idx_pre
+		print "idx", idx, "idx_pre", idx_pre, "counter:", idx - idx_pre
 		#print data[idx]
 		#print pre
 
@@ -82,7 +82,7 @@ if __name__ == '__main__':
 		for i in xrange(0, number_of_frame):
 			output.points[i] = Point(data[i+idx_pre][2], data[i+idx_pre][3], data[i+idx_pre][4])
 			#print output.points[i]
-			print data[i+idx_pre][2], data[i+idx_pre][3], data[i+idx_pre][4]
+			#print data[i+idx_pre][2], data[i+idx_pre][3], data[i+idx_pre][4]
 
 		# now publish the pointcloud
 		cloud_pub.publish(output)
