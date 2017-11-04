@@ -9,7 +9,9 @@ modify the Fixed Frame to odom
 ---
 
 # For C++:
-## catkin_create_pkg conti pcl_conversions pcl_ros roscpp rospy sensor_msgs std_msgs
+## Dependency of the create package command
+catkin_create_pkg conti pcl_conversions pcl_ros roscpp rospy sensor_msgs std_msgs
+
 ## modify the package.xml to add
   <build_depend>libpcl-all-dev</build_depend>
 
