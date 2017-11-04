@@ -30,11 +30,16 @@ if __name__ == '__main__':
 			tmp = str.split(line)
 			dist = float(tmp[len(tmp) -1])
 			z = 1
-			data.append([tmp[0], int(tmp[2]), dist*math.cos(angle), dist*math.sin(angle), z])
+			# timestamp overflow ?
+			#data.append([int(tmp[0]), int(tmp[2]), dist*math.cos(angle), dist*math.sin(angle), z])
+			data.append([int(tmp[0][0:9]), int(tmp[2]), dist*math.cos(angle), dist*math.sin(angle), z])
 	fp.close()
 
 	idx = 0
 	pre = data[0][1]
+#	pre = data[idx][0]
+	#d = 30	# s
+#	d = 70	# s
 	n = len(data) - 1
 	while not rospy.is_shutdown():
 		if idx == n:
@@ -43,10 +48,14 @@ if __name__ == '__main__':
 		if idx != 0:
 			idx = idx + 1
 			pre = data[idx][1]
+#			pre = data[idx][0]
 		while idx < n and pre < data[idx+1][1]:
+#		while idx < n and data[idx+1][0] < (pre + d) :
 			idx = idx + 1
 			pre = data[idx][1]
-		#print "idx", idx, "idx_pre", idx_pre
+#		print "idx", idx, "idx_pre", idx_pre, "during:", idx - idx_pre
+		#print data[idx]
+		#print pre
 
 		output = PointCloud()
 		output.header = std_msgs.msg.Header()
@@ -59,9 +68,9 @@ if __name__ == '__main__':
 
 		# fill up pointcloud with points
 		for i in xrange(0, number_of_frame):
-			output.points[i] = Point(data[i][2], data[i][3], data[i][4])
+			output.points[i] = Point(data[i+idx_pre][2], data[i+idx_pre][3], data[i+idx_pre][4])
 			#print output.points[i]
-			print data[i][2], data[i][3], data[i][4]
+			#print data[i+idx_pre][2], data[i+idx_pre][3], data[i+idx_pre][4]
 
 		# now publish the pointcloud
 		cloud_pub.publish(output)
