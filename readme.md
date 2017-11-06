@@ -31,7 +31,7 @@ modify the Fixed Frame to odom
 
 ---
 
-# Refer:
+# References:
 http://wiki.ros.org/pcl/Tutorials
 
 http://blog.csdn.net/ktigerhero3/article/details/70185651

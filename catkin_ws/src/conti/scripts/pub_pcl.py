@@ -16,9 +16,11 @@ if __name__ == '__main__':
 		queue_size=1
 	)
 
-	rate = rospy.Rate(10)
+	#rate = rospy.Rate(10)
+	rate = rospy.Rate(15)
 
 	data = []
+	# grep '\ 1793\ \|\ 1794\ ' canbus.txt > 7012
 	#with open('/home/ohy/workspace/conti/test', 'r') as fp:
 	with open('/home/ohy/workspace/conti/7012', 'r') as fp:
 		for line in fp:
@@ -40,6 +42,7 @@ if __name__ == '__main__':
 	fp.close()
 
 	idx = 0
+	counter = 1
 	if split_by_cycle:
 		pre = data[idx][1]
 	else:
@@ -65,7 +68,9 @@ if __name__ == '__main__':
 		else:
 			while idx < n and data[idx+1][0] < (pre + d) :
 				idx = idx + 1
-		print "idx", idx, "idx_pre", idx_pre, "counter:", idx - idx_pre
+		#print "idx", idx, "idx_pre", idx_pre, "num:", idx - idx_pre
+		print "counter:", counter
+		counter += 1
 		#print data[idx]
 		#print pre
 
